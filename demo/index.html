@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="UTF-8">
+    <title>JS error log demo page</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+        }
+    </style>
+</head>
+<body class="h-100 d-flex flex-column justify-content-center align-items-center">
+
+<div class="w-75 text-center text-info">
+    <h1 class="mb-5">Open console and network tabs, to see errors and requests.</h1>
+    <h4>js-error-log</h4>
+    <p><b>0.1</b></p>
+</div>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js-error-log.js"></script>
+
+<script>
+    // DON'T forget to change URL here!!
+    Logger.init('/url/to/send/log-messages/', {
+        'source': "someTestSource",
+        'errlevel': 'error'
+    });
+
+    Logger.sendMessage('test message');
+
+    //throw new Error('Unhandled js error');
+
+    //$.ajax('/test');
+
+    //new Promise(function (resolve, reject) {
+    //  afsdfs();
+    //});
+</script>
+</body>
+</html>
