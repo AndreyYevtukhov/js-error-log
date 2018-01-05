@@ -9,6 +9,9 @@ After initialisation `Logger` listens for:
 2. jQuery `.ajaxError` (only if jQuery is used)
 3. unhandled rejection in promises
 
+## Install
+`npm i js-error-log`
+
 ## How to use
 1. Add `js-error-log.js` on your page / bundle
 2. Call `Logger.init('/url/to/send/your/log-messages')`
