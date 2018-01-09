@@ -21,7 +21,8 @@ After initialisation `Logger` listens for:
 1. `.init(logPostURL, logDefaults)` - initialised event listeners
    1. `logPostURL` - logging POST requests endpoint url, required
    1. `logDefaults` - object, that contains additional logging data, if needed (check initialisation demo in demo/index.html for details)
-1. `.sendMessage(message)` - logs given message
+1. `.sendMessage(message)` - sends POST request with given message
+1. `isInit()` - returns logger initialisation state
 
 
 ## Log messages examples

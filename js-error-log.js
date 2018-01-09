@@ -96,8 +96,8 @@ let Logger = (function () {
          * @param logDefaults Object
          */
         init: function (logPostURL, logDefaults) {
-            if (!logPostURL) {
-                throw new Error('[logPostURL] is not defined.');
+            if (!logPostURL || typeof logPostURL !== 'string' || logPostURL instanceof String) {
+                throw new Error('[logPostURL] is required param. It must be a String.');
             }
 
             url = logPostURL;
@@ -109,6 +109,24 @@ let Logger = (function () {
         /**
          * sends log message, if needed
          */
-        sendMessage: sendMessage
+        sendMessage: sendMessage,
+
+        /**
+         * returns logger initialisation state
+         * can be used for local debug, if you don't want to send log message some where,
+         * but want to log it in console
+         *
+         * @example
+         * if (Logger.isInit) {
+         *  Logger.sendMessage(errorMessage);
+         * } else {
+         *  console.error(errorMessage);
+         * }
+         *
+         * @returns {boolean}
+         */
+        isInit: function () {
+            return !!url;
+        }
     }
 })();
