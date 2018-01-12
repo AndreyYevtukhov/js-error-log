@@ -19,12 +19,32 @@ let Logger = (function () {
     function init() {
         // log unhandled JS errors
         window.onerror = function (type, location, line, position, errorObj) {
-            let message = ' \n' + type + ' at' +
-                ' ' + location + ':' + line + ':' + position + ' ';
+            let message;
+
+            if (type && location && line && position) {
+                // standard error
+                message = ' \n' + type + ' at' +
+                    ' ' + location + ' at line:' + line + ' col:' + position;
+            } else if (type !== null && typeof type === 'object') {
+                // angular 2 app now sometimes wires EventErrors (???)
+                // this code will try to get information from them
+                message = ' \n' + (type.message) ? type.message : ' -- ' +
+                ' \nat filename' + (type.filename) ? type.filename : ' -- ' +
+                ' \nat line:' + (type.lineno) ? type.lineno : ' -- ' +
+                ' \nat col:' + (type.colno) ? type.colno : ' -- ';
+            } else {
+                // error data is invalid
+                // log as much as we can
+                message = ' \nUN-PROCESSABLE ERROR FIRED.!!! All possible information.' +
+                '\ntype = ' + type +
+                '\nlocation = ' + location +
+                '\nposition = ' + position +
+                '\nerrorObj = ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
+            }
 
             // fix for Safari issue
             // https://bugs.webkit.org/show_bug.cgi?id=55092
-            if (errorObj !== "undefined") {
+            if (errorObj !== undefined && errorObj.stack) {
                 message += '\n Stack: ' + errorObj.stack;
             }
 
@@ -117,7 +137,7 @@ let Logger = (function () {
          * but want to log it in console
          *
          * @example
-         * if (Logger.isInit) {
+         * if (Logger.isInit()) {
          *  Logger.sendMessage(errorMessage);
          * } else {
          *  console.error(errorMessage);

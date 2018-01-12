@@ -26,7 +26,7 @@ After initialisation `Logger` listens for:
 
 
 ## Log messages examples
-#### js error
+#### js error (standard error. See onerror handler functions for other possible outputs)
 
 ```
 [http://localhost:63342/js-error-log/demo/index.html?_ijt=801749sfdfouqaf0man5aklvu6]
