@@ -23,19 +23,22 @@ let Logger = (function () {
 
             if (type && location && line && position) {
                 // standard error
-                message = ' \n' + type + ' at' +
-                    ' ' + location + ' at line:' + line + ' col:' + position;
+                message = 'type: ' + type +
+                    ' \nat file: ' + location + ' ' +
+                    ' \nat line:' + line +
+                    ' \nat col: ' + position;
             } else if (type !== null && typeof type === 'object') {
                 // angular 2 app now sometimes wires EventErrors (???)
                 // this code will try to get information from them
-                message = ' \ntype: ' + ((type.message) ? type.message : ' -- ') +
-                    ' \nat filename: ' + ((type.filename) ? type.filename : ' -- ') +
+                message = 'type: ' + ((type.message) ? type.message : ' -- ') +
+                    ' \nat file: ' + ((type.filename) ? type.filename : ' -- ') +
                     ' \nat line: ' + ((type.lineno) ? type.lineno : ' -- ') +
-                    ' \nat col: ' + ((type.colno) ? type.colno : ' -- ');
+                    ' \nat col: ' + ((type.colno) ? type.colno : ' -- ') +
+                    ' \nstack:' + ((type.error && type.error.stack) ? type.error.stack : ' -- ');
             } else {
                 // error data is invalid
                 // log as much as we can
-                message = ' \nUN-PROCESSABLE ERROR FIRED.!!! All possible information.' +
+                message = 'UN-PROCESSABLE ERROR FIRED.!!! All possible information:' +
                 '\ntype = ' + type +
                 '\nlocation = ' + location +
                 '\nposition = ' + position +
