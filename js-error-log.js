@@ -28,10 +28,10 @@ let Logger = (function () {
             } else if (type !== null && typeof type === 'object') {
                 // angular 2 app now sometimes wires EventErrors (???)
                 // this code will try to get information from them
-                message = ' \n' + (type.message) ? type.message : ' -- ' +
-                ' \nat filename' + (type.filename) ? type.filename : ' -- ' +
-                ' \nat line:' + (type.lineno) ? type.lineno : ' -- ' +
-                ' \nat col:' + (type.colno) ? type.colno : ' -- ';
+                message = ' \ntype: ' + ((type.message) ? type.message : ' -- ') +
+                    ' \nat filename: ' + ((type.filename) ? type.filename : ' -- ') +
+                    ' \nat line: ' + ((type.lineno) ? type.lineno : ' -- ') +
+                    ' \nat col: ' + ((type.colno) ? type.colno : ' -- ');
             } else {
                 // error data is invalid
                 // log as much as we can
