@@ -24,32 +24,34 @@
 
                 if (type && location && line && position) {
                     // standard error
-                    message = 'type: ' + type +
-                        ' \nat file: ' + location + ' ' +
+                    message = 'ERROR:' +
+                        ' \n: ' + type +
+                        ' \n\nat file: ' + location + ' ' +
                         ' \nat line:' + line +
                         ' \nat col: ' + position;
                 } else if (type !== null && typeof type === 'object') {
                     // angular 2 app now sometimes wires EventErrors (???)
                     // this code will try to get information from them
-                    message = 'type: ' + ((type.message) ? type.message : ' -- ') +
-                        ' \nat file: ' + ((type.filename) ? type.filename : ' -- ') +
+                    message = 'Angular 2 EventError:' +
+                        ' \n' + ((type.message) ? type.message : ' -- ') +
+                        ' \n\nat file: ' + ((type.filename) ? type.filename : ' -- ') +
                         ' \nat line: ' + ((type.lineno) ? type.lineno : ' -- ') +
                         ' \nat col: ' + ((type.colno) ? type.colno : ' -- ') +
-                        ' \nstack: ' + ((type.error && type.error.stack) ? type.error.stack : ' -- ');
+                        ' \n\nstack: ' + ((type.error && type.error.stack) ? type.error.stack : ' -- ');
                 } else {
                     // error data is invalid
                     // log as much as we can
-                    message = ' UN-PROCESSABLE ERROR FIRED! All possible information:' +
-                    ' \ntype = ' + type +
-                    ' \nlocation = ' + location +
-                    ' \nposition = ' + position +
-                    ' \nerrorObj = ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
+                    message = 'UN-PROCESSABLE ERROR! All possible information:' +
+                    + type +
+                    ' \n\nlocation: ' + location +
+                    ' \nposition: ' + position +
+                    ' \n\nerrorObj: ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
                 }
 
                 // fix for Safari issue
                 // https://bugs.webkit.org/show_bug.cgi?id=55092
                 if (errorObj !== undefined && errorObj.stack) {
-                    message += ' \n Stack: ' + errorObj.stack;
+                    message += ' \n\nStack: ' + errorObj.stack;
                 }
 
                 sendMessage(message, 'error');
@@ -57,9 +59,9 @@
 
             // log errors inside promises
             window.addEventListener("unhandledrejection", function (err) {
-                let message = ' Promise unhandled error ' +
+                let message = 'Promise unhandled error' +
                     ' \nmessage: ' + err.reason.message +
-                    ' \nstack: ' + err.reason.stack;
+                    ' \n\nstack: ' + err.reason.stack;
 
                 sendMessage(message, 'error');
             });
@@ -67,8 +69,8 @@
             // log jQuery AJAX errors
             if (window.jQuery) {
                 $(document).ajaxError(function (event, xhr, options, exc) {
-                    let message = ' JQUERY-' + event.type +
-                        ' \nurl: ' + options.url +
+                    let message = 'jQuery AJAX Error' +
+                        ' \n\nurl: ' + options.url +
                         ' \nmethod: ' + options.type +
                         ' \nstatus: ' + xhr.status +
                         ' \nstatusText: ' + exc +
@@ -97,10 +99,11 @@
 
             let requestData = {};
 
-            let errorMessageWithPageDetails = 'Page: ' + window.location +
-                '\nError Info: ' + errorText +
-                '\nUser Agent: ' + window.navigator.userAgent + ']' +
-                '\nScreen Size: ' + window.innerWidth + 'x' + window.innerHeight;
+            let errorMessageWithPageDetails = errorText +
+                '\n\nClient info:' +
+                '\nURL: ' + window.location +
+                '\nCLN: ' + window.navigator.userAgent + ']' +
+                '\nX*Y: ' + window.innerWidth + 'x' + window.innerHeight;
 
             if (defaults) {
                 requestData = Object.assign({}, defaults, {
