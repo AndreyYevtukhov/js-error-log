@@ -39,42 +39,42 @@
                 } else {
                     // error data is invalid
                     // log as much as we can
-                    message = 'UN-PROCESSABLE ERROR FIRED.!!! All possible information:' +
-                    '\ntype = ' + type +
-                    '\nlocation = ' + location +
-                    '\nposition = ' + position +
-                    '\nerrorObj = ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
+                    message = ' UN-PROCESSABLE ERROR FIRED! All possible information:' +
+                    ' \ntype = ' + type +
+                    ' \nlocation = ' + location +
+                    ' \nposition = ' + position +
+                    ' \nerrorObj = ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
                 }
 
                 // fix for Safari issue
                 // https://bugs.webkit.org/show_bug.cgi?id=55092
                 if (errorObj !== undefined && errorObj.stack) {
-                    message += '\n Stack: ' + errorObj.stack;
+                    message += ' \n Stack: ' + errorObj.stack;
                 }
 
-                sendMessage(message);
+                sendMessage(message, 'error');
             };
 
             // log errors inside promises
             window.addEventListener("unhandledrejection", function (err) {
                 let message = ' Promise unhandled error ' +
-                    '\nmessage: ' + err.reason.message +
-                    '\nstack: ' + err.reason.stack;
+                    ' \nmessage: ' + err.reason.message +
+                    ' \nstack: ' + err.reason.stack;
 
-                sendMessage(message);
+                sendMessage(message, 'error');
             });
 
             // log jQuery AJAX errors
             if (window.jQuery) {
                 $(document).ajaxError(function (event, xhr, options, exc) {
                     let message = ' JQUERY-' + event.type +
-                        '\nurl: ' + options.url +
-                        '\nmethod: ' + options.type +
-                        '\nstatus: ' + xhr.status +
-                        '\nstatusText: ' + exc +
-                        '\nresponse: ' + xhr.responseText;
+                        ' \nurl: ' + options.url +
+                        ' \nmethod: ' + options.type +
+                        ' \nstatus: ' + xhr.status +
+                        ' \nstatusText: ' + exc +
+                        ' \nresponse: ' + xhr.responseText;
 
-                    sendMessage(message);
+                    sendMessage(message, 'error');
                 });
             }
         }
@@ -82,9 +82,10 @@
         /**
          * sends POST request with formatted error message
          *
-         * @param message: String
+         * @param errorText: String
+         * @param errLevel: String
          */
-        function sendMessage(message) {
+        function sendMessage(errorText, errLevel) {
             if (!url) {
                 throw new Error('[url] is not defined. You need to initialise logger first.');
             }
@@ -95,15 +96,19 @@
             x.setRequestHeader('Content-type', 'application/json; charset=utf-8');
 
             let requestData = {};
-            let pageInfo = '\n[' + window.location + ']' +
-                '\n[' + window.navigator.userAgent + ']' +
-                '\n[' + window.innerWidth + 'x' + window.innerHeight + ']' +
-                '\nerror: ' + message;
+
+            let errorMessageWithPageDetails = 'Page: ' + window.location +
+                '\nError Info: ' + errorText +
+                '\nUser Agent: ' + window.navigator.userAgent + ']' +
+                '\nScreen Size: ' + window.innerWidth + 'x' + window.innerHeight;
 
             if (defaults) {
-                requestData = Object.assign(defaults, {message: pageInfo});
+                requestData = Object.assign({}, defaults, {
+                    errlevel: errLevel,
+                    message: errorMessageWithPageDetails
+                });
             } else {
-                requestData.message = pageInfo;
+                requestData.message = errorMessageWithPageDetails;
             }
 
             x.send(JSON.stringify(requestData));
@@ -142,10 +147,10 @@
              *
              * @example
              * if (Logger.isInit()) {
-         *  Logger.sendMessage(errorMessage);
-         * } else {
-         *  console.error(errorMessage);
-         * }
+             *  Logger.sendMessage(errorMessage);
+             * } else {
+             *  console.error(errorMessage);
+             * }
              *
              * @returns {boolean}
              */
@@ -157,8 +162,7 @@
 
     if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         module.exports = Logger;
-    }
-    else {
+    } else {
         window.Logger = Logger;
     }
 })();

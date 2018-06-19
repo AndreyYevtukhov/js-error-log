@@ -27,10 +27,9 @@
     // DON'T forget to change URL here!!
     Logger.init('/url/to/send/log-messages/', {
         'source': "someTestSource",
-        'errlevel': 'error'
     });
 
-    Logger.sendMessage('test message');
+    Logger.sendMessage('test message', 'warning');
 
     //throw new Error('Unhandled js error');
 
