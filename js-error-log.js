@@ -76,6 +76,9 @@
                         ' \nstatusText: ' + exc +
                         ' \nresponse: ' + xhr.responseText;
 
+                    message+= ` \n\nDebug info:
+                        ${JSON.stringify(arguments)}`;
+
                     sendMessage(message, 'error');
                 });
             }
