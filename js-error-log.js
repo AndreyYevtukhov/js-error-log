@@ -122,7 +122,7 @@
      * @param i {string}
      * @param domMs {number}
      * @param loadMs {number}
-     * @param resourcesTimings {Array<{_n: string, _d: number}>}
+     * @param resourcesTimings {string}
      */
     function sendLoadMessage(i, domMs, loadMs, resourcesTimings) {
       if (!url) {
@@ -134,7 +134,9 @@
         dom: domMs,
         load: loadMs,
         errlevel: 'load',
-        message: resourcesTimings
+        message: `${resourcesTimings}
+        
+        ${getClientInfo()}`
       });
 
       createXHR().send(JSON.stringify(requestData));
