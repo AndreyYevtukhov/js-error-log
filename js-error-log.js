@@ -129,13 +129,13 @@
         throw new Error('[url] is not defined. You need to initialise logger first.');
       }
 
-      let requestData = {
+      let requestData = Object.assign({}, defaults, {
         i: i,
         dom: domMs,
         load: loadMs,
         errlevel: 'load',
         message: resourcesTimings
-      };
+      });
 
       createXHR().send(JSON.stringify(requestData));
     }
