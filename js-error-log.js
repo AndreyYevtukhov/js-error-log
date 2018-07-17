@@ -103,29 +103,57 @@
         throw new Error('[url] is not defined. You need to initialise logger first.');
       }
 
-      let x = new XMLHttpRequest();
-
-      x.open('POST', url, true);
-      x.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-
       let requestData = {};
+      let message = errorText + getClientInfo();
 
-      let errorMessageWithPageDetails = errorText +
-        '\n\nClient info:' +
+      if (errLevel) {
+        requestData = Object.assign({}, defaults, {
+          errlevel: errLevel,
+          message: message
+        });
+      } else {
+        requestData.message = message;
+      }
+
+      createXHR().send(JSON.stringify(requestData));
+    }
+
+    /**
+     * @param i {string}
+     * @param domMs {number}
+     * @param loadMs {number}
+     * @param resourcesTimings {Array<{_n: string, _d: number}>}
+     */
+    function sendLoadMessage(i, domMs, loadMs, resourcesTimings) {
+      if (!url) {
+        throw new Error('[url] is not defined. You need to initialise logger first.');
+      }
+
+      let requestData = {
+        i: i,
+        dom: domMs,
+        load: loadMs,
+        errlevel: 'load',
+        message: resourcesTimings
+      };
+
+      createXHR().send(JSON.stringify(requestData));
+    }
+
+    function createXHR() {
+      let xhr = new XMLHttpRequest();
+
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+      return xhr;
+    }
+
+    function getClientInfo() {
+      return '\n\nClient info:' +
         '\nURL: ' + window.location +
         '\nCLN: ' + window.navigator.userAgent +
         '\nX*Y: ' + window.innerWidth + 'x' + window.innerHeight;
-
-      if (defaults) {
-        requestData = Object.assign({}, defaults, {
-          errlevel: errLevel,
-          message: errorMessageWithPageDetails
-        });
-      } else {
-        requestData.message = errorMessageWithPageDetails;
-      }
-
-      x.send(JSON.stringify(requestData));
     }
 
     /**
@@ -149,10 +177,9 @@
         init();
       },
 
-      /**
-       * sends log message, if needed
-       */
       sendMessage: sendMessage,
+
+      sendLoadMessage: sendLoadMessage,
 
       /**
        * returns logger initialisation state
