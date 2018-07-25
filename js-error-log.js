@@ -80,13 +80,9 @@
           let message = 'jQuery AJAX Error' +
             ' \n\nurl: ' + options.url +
             ' \nmethod: ' + options.type +
-            ' \nstatus: ' + xhr.status +
+            ' \nxhr.status: ' + xhr.status +
             ' \nstatusText: ' + exc +
-            ' \nresponse: ' + xhr.responseText;
-
-          message += ` \n\nDebug info:
-                        \nexc: ${exc}
-                        \nxhr: ${xhr}`;
+            ' \nxhr.responseText: ' + xhr.responseText;
 
           sendMessage(message, 'error');
         });
