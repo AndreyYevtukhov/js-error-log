@@ -85,7 +85,8 @@
             ' \nresponse: ' + xhr.responseText;
 
           message += ` \n\nDebug info:
-                        ${JSON.stringify(arguments[0])}`;
+                        \nexc: ${exc}
+                        \nxhr: ${xhr}`;
 
           sendMessage(message, 'error');
         });
