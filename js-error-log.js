@@ -66,9 +66,7 @@
             ' \nmessage: ' + err.reason.message +
             ' \n\nstack: ' + err.reason.stack;
         } else {
-          message = `Promise unhandled error without reason.
-                    
-                    ${JSON.stringify(err)}`;
+          message = 'Promise unhandled error without reason.\n\n' + JSON.stringify(err);
         }
 
         sendMessage(message, 'error');
@@ -131,9 +129,7 @@
         dom: domMs,
         load: loadMs,
         errlevel: 'load',
-        message: `${resourcesTimings}
-        
-        ${getClientInfo()}`
+        message: resourcesTimings + "\n\n" + getClientInfo()
       });
 
       createXHR().send(JSON.stringify(requestData));
