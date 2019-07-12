@@ -30,7 +30,7 @@
             ' \nat line:' + line +
             ' \nat col: ' + position;
         } else if (type !== null && typeof type === 'object') {
-          // angular 2 app now sometimes wires EventErrors (???)
+          // angular 2 app now sometimes wires EventErrors
           // this code will try to get information from them
           message = 'Angular 2 EventError:' +
             ' \n' + ((type.message) ? type.message : ' -- ') +
@@ -42,7 +42,7 @@
           // error data is invalid
           // log as much as we can
           message = 'UN-PROCESSABLE ERROR! All possible information:' +
-          +type +
+          + type +
           ' \n\nlocation: ' + location +
           ' \nposition: ' + position +
           ' \n\nerrorObj: ' + (type !== null && typeof type === 'object') ? JSON.stringify(errorObj) : errorObj;
@@ -50,7 +50,7 @@
 
         // fix for Safari issue
         // https://bugs.webkit.org/show_bug.cgi?id=55092
-        if (errorObj !== undefined && errorObj.stack) {
+        if (errorObj && errorObj.stack) {
           message += ' \n\nStack: ' + errorObj.stack;
         }
 
