@@ -62,17 +62,13 @@
 
       // log errors inside promises
       window.addEventListener("unhandledrejection", function (err) {
-        let message;
-
         if (err && err.reason) {
-          message = 'Promise unhandled error' +
+          let message = 'Promise unhandled error' +
             ' \nmessage: ' + err.reason.message +
             ' \n\nstack: ' + err.reason.stack;
-        } else {
-          message = 'Promise unhandled error without reason.\n\n' + JSON.stringify(err);
-        }
 
-        sendMessage(message, 'error');
+          sendMessage(message, 'error');
+        }
       });
 
       // log jQuery AJAX errors
