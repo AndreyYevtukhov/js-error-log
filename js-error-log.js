@@ -54,7 +54,10 @@
           message += ' \n\nStack: ' + errorObj.stack;
         }
 
-        sendMessage(message, 'error');
+        // log message, only if it is defined
+        if (message) {
+          sendMessage(message, 'error');
+        }
       };
 
       // log errors inside promises
